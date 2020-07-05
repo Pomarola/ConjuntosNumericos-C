@@ -14,12 +14,44 @@ char* leer_entrada(char* entrada){
     return entrada;
 }
 
+int descomponer_entrada(char* entrada, char* primerTermino, char* segundoTermino){
+    int i=0, j=0;
+    while (entrada[i] != ' '){
+        primerTermino[j] = entrada[i];
+        j++;
+        i++;
+    }
+    primerTermino[j] = '\0';
+    j = 0;
+    if (entrada[i] != ' ')
+        return 1;
+    i++;
+    if (strcmp(primerTermino, "imprimir\0") == 0){
+        while (entrada[i] != '\0'){
+            segundoTermino[j] = entrada[i];
+            j++;
+            i++;
+        }
+        segundoTermino[j] = '\0';
+        return 0;
+    }
+    return 1;
+    
+}
+
 int main (){
-    char entrada[MAX_LINEA];
+    char entrada[MAX_LINEA], primerTermino[MAX_LINEA], segundoTermino[MAX_LINEA];
     printf ("ingrese comando\n");
     while (strcmp(leer_entrada(entrada), "salir\0") != 0){
-        printf ("%s \n",entrada);
+        printf ("entrada: %s \n",entrada);
+        if (descomponer_entrada(entrada, primerTermino, segundoTermino) == 0){
+            printf ("primer: %s \n",primerTermino);
+            printf ("segundo: %s \n",segundoTermino);
+        } else
+            printf ("error\n");
     }
+
+
 
     return 0;
 }
