@@ -1,5 +1,6 @@
-#ifndef __GLIST_H__
-#define __GLIST_H__
+#ifndef __CONJUNTO_H__
+#define __CONJUNTO_H__
+#include "dlist.h"
 #include <stdlib.h>
 
 typedef struct _Intervalo {
@@ -14,7 +15,7 @@ int intersecar(Intervalo primero, Intervalo segundo);
 int intervalo_valido(Intervalo dato);
 
 // Crea un intervalo en memoria con los datos recibidos y devuelve un puntero a este.
-Intervalo *llenar_intervalo(int inicio, int final);
+Intervalo *crear_intervalo(Intervalo dato);
 
 
-#endif /* __GLIST_H__ */
+#endif /* __CONJUNTO_H__ */
