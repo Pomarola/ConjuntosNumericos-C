@@ -23,3 +23,19 @@ DoubleList insertar_intervalo_final(DoubleList lista, Intervalo dato) {
     dlist_insertar_final(lista, nuevoIntervalo);
     return lista;
 }
+
+DoubleList conjunto_union(char* nombre, DoubleList lista1, DoubleList lista2){
+    DoubleList unionConjuntos = dlist_crear(nombre);
+    DNodo* nodo1 = lista1->primero,* nodo2 = lista2->primero;
+    Intervalo intervaloAux;
+
+    int iniNodo1, finNodo1, iniNodo2, finNodo2;
+    while(nodo1 && nodo2){
+        intervaloAux.inicio = ((Intervalo*) (nodo1->dato))->inicio <= ((Intervalo*) (nodo2->dato))->inicio ?
+         ((Intervalo*) (nodo1->dato))->inicio : ((Intervalo*) (nodo2->dato))->inicio;
+        if
+
+
+        insertar_intervalo_final(unionConjuntos, intervaloAux);
+    }
+}
