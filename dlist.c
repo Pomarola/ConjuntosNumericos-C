@@ -1,7 +1,7 @@
 #include "dlist.h"
 
-DoubleList dlist_crear(char *nombre) {
-  DoubleList lista = malloc(sizeof(DList));
+DList* dlist_crear(char *nombre) {
+  DList* lista = malloc(sizeof(DList));
   lista->primero = NULL;
   lista->ultimo = NULL;
   lista->nombre = malloc(sizeof(char) * (strlen(nombre) + 1));
@@ -9,9 +9,9 @@ DoubleList dlist_crear(char *nombre) {
   return lista;
 }
 
-void dlist_destruir(DoubleList lista) {
+void dlist_destruir(DList* lista) {
   DNodo *nodoAEliminar;
-  while (lista->primero != NULL) {
+  while (lista->primero) {
     nodoAEliminar = lista->primero;
     lista->primero = nodoAEliminar->sig;
     free(nodoAEliminar->dato);
@@ -21,19 +21,35 @@ void dlist_destruir(DoubleList lista) {
   free(lista);
 }
 
-void dlist_insertar_final(DoubleList lista, void *dato) {
+void dlist_insertar_final(DList* lista, void *dato) {
   DNodo *nuevoNodo = malloc(sizeof(DNodo));
   nuevoNodo->dato = dato;
   nuevoNodo->sig = NULL;
   nuevoNodo->ant = lista->ultimo;
 
-  if (lista->ultimo != NULL) {
+  if (lista->ultimo) {
     lista->ultimo->sig = nuevoNodo;
   }
-  if (lista->primero == NULL) {
+  if (!lista->primero) {
     lista->primero = nuevoNodo;
   }
   lista->ultimo = nuevoNodo;
+}
+
+void imprimir_dlist_pantalla(DList * lista, FuncionVisitante imprimir) {
+  if (lista) {
+    DNodo* nodo = lista->primero;
+    if (!nodo)
+      printf("Ø\n");
+    else {
+      for (; nodo->sig != NULL; nodo = nodo->sig) {
+          imprimir(nodo->dato);
+          printf(",");
+      }
+      imprimir(nodo->dato);
+      printf("\n");
+    }
+  }
 }
 
 DNodo *dividir_lista(DNodo * primero) {
@@ -51,9 +67,9 @@ DNodo *dividir_lista(DNodo * primero) {
 }
 
 DNodo *merge(DNodo * primero, DNodo * segundo, FuncionCompara comparar) {
-  if (primero == NULL)
+  if (!primero)
     return segundo;
-  if (segundo == NULL)
+  if (!segundo)
     return primero;
 
   if (comparar(primero->dato, segundo->dato) <= 0) {
@@ -70,7 +86,7 @@ DNodo *merge(DNodo * primero, DNodo * segundo, FuncionCompara comparar) {
 }
 
 DNodo *merge_sort(DNodo * primero, FuncionCompara comparar) {
-  if (primero == NULL || primero->sig == NULL)
+  if (!primero || !primero->sig)
     return primero;
 
   DNodo *mitad = dividir_lista(primero);
@@ -81,8 +97,8 @@ DNodo *merge_sort(DNodo * primero, FuncionCompara comparar) {
   return merge(primero, mitad, comparar);
 }
 
-void dlist_merge_sort(DoubleList lista, FuncionCompara comparar) {
-  if (lista->primero != NULL) {
+void dlist_merge_sort(DList* lista, FuncionCompara comparar) {
+  if (lista->primero) {
 
     DNodo *nodo = lista->primero;
 
