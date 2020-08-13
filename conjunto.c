@@ -8,8 +8,8 @@ Intervalo *crear_intervalo(int inicio, int final) {
   return nuevoIntervalo;
 }
 
-int intervalo_valido(Intervalo dato) {
-  if (dato.inicio > dato.final)
+int intervalo_valido(int inicio, int final) {
+  if (inicio > final)
     return 0;
   return 1;
 }

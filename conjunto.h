@@ -15,7 +15,7 @@ typedef DList* Conjunto;
 Intervalo *crear_intervalo(int inicio, int final);
 
 // Devuelve 1 si se trata de un intervalo valido, 0 si no lo es.
-int intervalo_valido(Intervalo dato);
+int intervalo_valido(int inicio, int final);
 
 // Imprime en pantalla el intervalo.
 void imprimir_intervalo(void *intervalo);
