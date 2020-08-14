@@ -36,7 +36,7 @@ void dlist_insertar_final(DList* lista, void *dato) {
   lista->ultimo = nuevoNodo;
 }
 
-void imprimir_dlist_pantalla(DList * lista, FuncionVisitante imprimir) {
+void dlist_imprimir(DList * lista, FuncionVisitar imprimir) {
   if (lista) {
     DNodo* nodo = lista->primero;
     if (!nodo)
@@ -66,7 +66,7 @@ DNodo *dividir_lista(DNodo * primero) {
   return mitad;
 }
 
-DNodo *merge(DNodo * primero, DNodo * segundo, FuncionCompara comparar) {
+DNodo *merge(DNodo * primero, DNodo * segundo, FuncionComparar comparar) {
   if (!primero)
     return segundo;
   if (!segundo)
@@ -85,7 +85,7 @@ DNodo *merge(DNodo * primero, DNodo * segundo, FuncionCompara comparar) {
   }
 }
 
-DNodo *merge_sort(DNodo * primero, FuncionCompara comparar) {
+DNodo *merge_sort(DNodo * primero, FuncionComparar comparar) {
   if (!primero || !primero->sig)
     return primero;
 
@@ -97,7 +97,7 @@ DNodo *merge_sort(DNodo * primero, FuncionCompara comparar) {
   return merge(primero, mitad, comparar);
 }
 
-void dlist_merge_sort(DList* lista, FuncionCompara comparar) {
+void dlist_merge_sort(DList* lista, FuncionComparar comparar) {
   if (lista->primero) {
 
     DNodo *nodo = lista->primero;

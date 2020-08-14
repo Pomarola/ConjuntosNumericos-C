@@ -20,6 +20,8 @@ int intervalo_valido(int inicio, int final);
 // Imprime en pantalla el intervalo.
 void imprimir_intervalo(void *intervalo);
 
+int conjunto_comparar_nombre(Conjunto conjunto, char* dato);
+
 // Libera el espacio en memoria ocupado por el intervalo.
 void liberar_intervalo(void *intervalo);
 

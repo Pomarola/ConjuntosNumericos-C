@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <conjunto.h>
+#include <hash.h>
 #define MAX_LINEA 1001
 
 char* leer_entrada(char* entrada){
@@ -43,17 +44,17 @@ int descomponer_entrada(char* entrada, char* primerTermino, char* segundoTermino
     
 }
 
-int realizar_operacion (char* primerTermino, char* segundoTermino){
+int realizar_operacion (char* primerTermino, char* segundoTermino, SList* tablaHash){
     Conjunto conjunto;
     char buffer[MAX_LINEA];
     int i=0, j=0;
     if (segundoTermino[i] == '{'){
         if (segundoTermino[i+1] >= 'a' && segundoTermino[i+1] <= 'z'){
-            // primerConjunto = leer_conjunto_compresion(primerTermino, segundoTermino);
-            // insertar_tabla_hash (conjunto, tablaHash);
+            conjunto = leer_conjunto_compresion(primerTermino, segundoTermino);
+            thash_insertar (conjunto, tablaHash);
         } else {
-            // primerConjunto = leer_conjunto_extension(primerTermino, segundoTermino);
-            // insertar_tabla_hash (conjunto, tablaHash);
+            conjunto = leer_conjunto_extension(primerTermino, segundoTermino);
+            thash_insertar (conjunto, tablaHash);
         }
     } else if (segundoTermino[i] == '∼'){
         i++;
@@ -142,7 +143,7 @@ Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino){
         j = 0;
         dlist_insertar_final(conjunto, crear_intervalo(atoi(numero), atoi(numero)));
     }
-    
+
     return conjunto;
 }
 
@@ -170,8 +171,8 @@ int operacion_dos_conjuntos (char* primerTermino, char* segundoTermino){
     } else
         printf ("error\n");
 
-    // primerConjunto = buscar_tabla_hash(primerBuffer, tablaHash);
-    // segundoConjunto = buscar_tabla_hash(primerBuffer, tablaHash);
+    primerConjunto = thash_buscar(primerBuffer, tablaHash, hash_str, conjunto_comparar_nombre);
+    segundoConjunto = thash_buscar(primerBuffer, tablaHash, hash_str, conjunto_comparar_nombre);
     if (primerConjunto && segundoConjunto){
         switch (operacion) {
             case '|':
@@ -201,6 +202,7 @@ int main (){
     int codigo;
     char entrada[MAX_LINEA], primerTermino[MAX_LINEA], segundoTermino[MAX_LINEA];
     Conjunto conjunto;
+    SList* tablaHash = thash_crear();
     printf ("ingrese comando\n");
     while (strcmp(leer_entrada(entrada), "salir\0") != 0){
         printf ("entrada: %s \n",entrada);
@@ -210,13 +212,13 @@ int main (){
             case 1:
                 /* imprimo segundo termino */
                 printf ("imprimo \n");
-                // imprimir_dlist_pantalla(buscar_tabla_hash(segundoTermino, tablaHash), imprimir_intervalo);
+                dlist_imprimir(thash_buscar(segundoTermino, tablaHash, hash_str, conjunto_comparar_nombre), imprimir_intervalo);
                 printf ("segundo: %s \n",segundoTermino);
                 break;
             
             case 2:
                 /* hacer operaciones */
-                // realizar_operacion(primerTermino, segundoTermino);
+                realizar_operacion(primerTermino, segundoTermino, tablaHash);
                 printf ("primer: %s \n",primerTermino);
                 printf ("segundo: %s \n",segundoTermino);
                 break;
@@ -224,6 +226,7 @@ int main (){
                 printf ("error\n");
         }
     }
+    thash_destruir(tablaHash, dlist_destruir);
 
     return 0;
 }

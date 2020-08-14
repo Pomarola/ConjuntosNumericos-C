@@ -21,6 +21,12 @@ void imprimir_intervalo(void *intervalo) {
     printf("%d:%d", ((Intervalo *) intervalo)->inicio, ((Intervalo *) intervalo)->final);
 }
 
+int conjunto_comparar_nombre(Conjunto conjunto, char* dato){
+  if (strcmp(conjunto->nombre,dato) == 0)
+    return 1;
+  return 0;
+}
+
 void liberar_intervalo(void *intervalo) {
   free(((Intervalo *) intervalo));
 }
