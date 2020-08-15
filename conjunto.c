@@ -64,18 +64,21 @@ Conjunto conjunto_union(char* nombre, Conjunto lista1, Conjunto lista2) {
         nodo2 = nodo2->sig;
       }
     } else {
-      if (intersecar(((Intervalo*) (nodo1->dato))->inicio, ((Intervalo*) (nodo1->dato))->final, (intervaloAux->inicio + 1), (intervaloAux->final + 1))){
+      if (nodo1 && intersecar(((Intervalo*) (nodo1->dato))->inicio, ((Intervalo*) (nodo1->dato))->final, (intervaloAux->inicio + 1), (intervaloAux->final + 1))){
         unificar_intervalos(nodo1->dato, intervaloAux);
         nodo1 = nodo1->sig;
-      } else if (intersecar(((Intervalo*) (nodo2->dato))->inicio, ((Intervalo*) (nodo2->dato))->final, (intervaloAux->inicio + 1), (intervaloAux->final + 1))){
+      } else if (nodo2 && intersecar(((Intervalo*) (nodo2->dato))->inicio, ((Intervalo*) (nodo2->dato))->final, (intervaloAux->inicio + 1), (intervaloAux->final + 1))){
         unificar_intervalos(nodo2->dato, intervaloAux);
-        nodo1 = nodo2->sig;
+        nodo2 = nodo2->sig;
       } else {
         dlist_insertar_final(unionConjuntos, intervaloAux);
         intervaloAux = NULL;
       }
     }
+    printf("hola \n");
   }
+  dlist_insertar_final(unionConjuntos, intervaloAux);
+  
   return unionConjuntos;
 }
 

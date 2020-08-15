@@ -122,7 +122,6 @@ void operacion_dos_conjuntos (char* primerTermino, char* segundoTermino, SList* 
     if (primerConjunto && segundoConjunto){
         switch (operacion) {
             case '|':
-                printf("hola \n");
                 tablaHash = thash_insertar (conjunto_union(primerTermino, primerConjunto, segundoConjunto), tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
                 break;
 
@@ -207,8 +206,6 @@ void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tabla
         buffer[j] = '\0';
         
         conjunto = thash_buscar(buffer, tablaHash, hash_str, conjunto_comparar_string);
-        printf("nodo comp :");
-        imprimir_intervalo((Intervalo*)conjunto->primero);
         tablaHash = thash_insertar (conjunto_complemento(primerTermino, conjunto), tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
         
     } else
