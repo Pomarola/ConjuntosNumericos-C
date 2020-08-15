@@ -1,8 +1,147 @@
-#include <stdio.h>
-#include <string.h>
-#include <conjunto.h>
-#include <hash.h>
+#include "conjunto.h"
+#include "hash.h"
+
 #define MAX_LINEA 1001
+
+int hash_conjunto(void* conjunto){
+    return hash_str(((Conjunto) conjunto)->nombre);
+}
+
+Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino, SList* tablaHash){
+    Conjunto conjunto = NULL;
+    char inicioStr[MAX_LINEA], finalStr[MAX_LINEA], letra = segundoTermino[1];
+    int i=5, j=0, inicio, final = 0; 
+    if (segundoTermino[2] == ' ' && segundoTermino[3] == ':' && segundoTermino[4] == ' '){ // ya sabemos que segundoTermino[0] = '{' y que segundoTermino[1] es una letra
+        while (segundoTermino[i] != '<') {
+            inicioStr[j] = segundoTermino[i];
+            i++;
+            j++;
+        }
+        j = 0;
+        if (segundoTermino[i+1] == '='){
+            i++;
+        }
+        else if (segundoTermino[i+1] == ' ')
+            inicio = 1;   
+        else{
+            printf ("sintaxis incorrecta\n");
+            return NULL;
+        }
+        inicio = atoi(inicioStr);
+
+        i = i + 2;
+        if (segundoTermino[i] != letra){
+            printf ("sintaxis incorrecta\n");
+            return NULL;
+        }
+        i = i + 2;
+
+        if (segundoTermino[i] != '<'){
+            printf ("sintaxis incorrecta\n");
+            return NULL;
+        }
+
+        if (segundoTermino[i+1] == '='){
+            i++;
+        }
+        else if (segundoTermino[i+1] == ' ')
+            final = -1;   
+        else{
+            printf ("sintaxis incorrecta\n");
+            return NULL;
+        }
+        i = i + 2;
+
+        while (segundoTermino[i] != '}') {
+            finalStr[j] = segundoTermino[i];
+            i++;
+            j++;
+        }
+        final += atoi(finalStr);
+
+        conjunto = dlist_crear(primerTermino);
+        if (intervalo_valido(inicio, final))
+            dlist_insertar_final(conjunto, crear_intervalo(inicio, final));
+
+    } else
+        printf ("sintaxis incorrecta\n");
+    return conjunto;
+}
+
+Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino, SList* tablaHash){
+    Conjunto conjunto = dlist_crear(primerTermino);
+    int i = 0;
+    long numero;
+
+    char *buffer = &segundoTermino[0] + 1;
+    while (buffer[i] != '}') {
+        if(buffer[i] == ',')
+            i++;
+        else{
+            numero = strtol(buffer + i, &buffer, 10);
+            //printf("numero: %ld \n", numero);
+            dlist_insertar_final(conjunto, crear_intervalo(numero, numero));
+            i = 0;
+        }
+    }
+    //printf("salio \n");
+    //printf("jajaj: %s \n", conjunto->nombre);
+
+    return conjunto;
+}
+
+void operacion_dos_conjuntos (char* primerTermino, char* segundoTermino, SList* tablaHash){
+    char primerBuffer[MAX_LINEA], segundoBuffer[MAX_LINEA], operacion;
+    int i = 0, j = 0;
+    Conjunto primerConjunto, segundoConjunto;
+
+    while (segundoTermino[i] != ' '){
+        primerBuffer[j] = segundoTermino[i];
+        j++; 
+        i++;
+    }
+    primerBuffer[j] = '\0';
+    j = 0;
+    i++;
+    operacion = segundoTermino[i];
+    i++;
+    if (segundoTermino[i] == ' '){
+        i++;
+        while (segundoTermino[i] != '\0'){
+            segundoBuffer[j] = segundoTermino[i];
+            i++;
+            j++;
+        }
+        segundoBuffer[j] = '\0';
+    } else
+        printf ("error\n");
+
+    primerConjunto = ((Conjunto) thash_buscar(primerBuffer, tablaHash, hash_str, conjunto_comparar_string));
+    segundoConjunto = ((Conjunto) thash_buscar(segundoBuffer, tablaHash, hash_str, conjunto_comparar_string));
+
+    if (primerConjunto && segundoConjunto){
+        switch (operacion) {
+            case '|':
+                printf("hola \n");
+                tablaHash = thash_insertar (conjunto_union(primerTermino, primerConjunto, segundoConjunto), tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
+                break;
+
+            case '&':
+                tablaHash = thash_insertar (conjunto_interseccion(primerTermino, primerConjunto, segundoConjunto), tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
+                break;
+            
+            case '-':
+                tablaHash = thash_insertar (conjunto_resta(primerTermino, primerConjunto, segundoConjunto), tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
+                break;
+            
+            default:
+                printf ("error\n");
+        }
+
+    } else 
+        printf ("no se encontro alguno de los conjuntos\n");
+
+}
 
 char* leer_entrada(char* entrada){
     int largoEntrada;
@@ -44,19 +183,21 @@ int descomponer_entrada(char* entrada, char* primerTermino, char* segundoTermino
     
 }
 
-int realizar_operacion (char* primerTermino, char* segundoTermino, SList* tablaHash){
+void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tablaHash){
     Conjunto conjunto;
     char buffer[MAX_LINEA];
     int i=0, j=0;
     if (segundoTermino[i] == '{'){
         if (segundoTermino[i+1] >= 'a' && segundoTermino[i+1] <= 'z'){
-            conjunto = leer_conjunto_compresion(primerTermino, segundoTermino);
-            thash_insertar (conjunto, tablaHash);
+            conjunto = leer_conjunto_compresion(primerTermino, segundoTermino, tablaHash);
         } else {
-            conjunto = leer_conjunto_extension(primerTermino, segundoTermino);
-            thash_insertar (conjunto, tablaHash);
+            conjunto = leer_conjunto_extension(primerTermino, segundoTermino, tablaHash);
         }
-    } else if (segundoTermino[i] == '∼'){
+        if (conjunto){
+            dlist_merge_sort(conjunto, intervalo_comparar);
+            tablaHash = thash_insertar (conjunto, tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
+        }
+    } else if (segundoTermino[i] == '~'){
         i++;
         while (segundoTermino[i] != '\0'){
             buffer[j] = segundoTermino[i];
@@ -64,163 +205,30 @@ int realizar_operacion (char* primerTermino, char* segundoTermino, SList* tablaH
             i++;
         }
         buffer[j] = '\0';
-        // conjunto = buscar_tabla_hash(buffer, tablaHash);
-        // insertar_tabla_hash (conjunto_complemento(primerTermino, conjunto), tablaHash);
+        
+        conjunto = thash_buscar(buffer, tablaHash, hash_str, conjunto_comparar_string);
+        printf("nodo comp :");
+        imprimir_intervalo((Intervalo*)conjunto->primero);
+        tablaHash = thash_insertar (conjunto_complemento(primerTermino, conjunto), tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
         
     } else
-        operacion_dos_conjuntos (primerTermino, segundoTermino);
+        operacion_dos_conjuntos (primerTermino, segundoTermino, tablaHash);
 }
-
-Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino){
-    Conjunto conjunto = NULL;
-    char inicioStr[MAX_LINEA], finalStr[MAX_LINEA], letra = segundoTermino[1];
-    int i=5, j=0, inicio, final = 0; 
-    if (segundoTermino[2] == ' ' && segundoTermino[3] == ':' && segundoTermino[4] == ' '){ // ya sabemos que segundoTermino[0] = '{' y que segundoTermino[1] es una letra
-        while (segundoTermino[i] != '<') {
-            inicioStr[j] = segundoTermino[i];
-            i++;
-            j++;
-        }
-        j = 0;
-        if (segundoTermino[i+1] == '='){
-            inicio = atoi(inicioStr);   
-            i++;
-        }
-        else if (segundoTermino[i+1] == ' ')
-            inicio = atoi(inicioStr) + 1;   
-        else
-            printf ("sintaxis incorrecta\n");
-            return NULL;
-
-        i = i + 2;
-        if (segundoTermino[i] != letra){
-            printf ("sintaxis incorrecta\n");
-            return NULL;
-        }
-        i = i + 2;
-
-        if (segundoTermino[i] != '<')
-            printf ("sintaxis incorrecta\n");
-            return NULL;
-
-        if (segundoTermino[i+1] == '='){
-            i++;
-        }
-        else if (segundoTermino[i+1] == ' ')
-            final = 1;   
-        else
-            printf ("sintaxis incorrecta\n");
-            return NULL;
-        i = i + 2;
-
-        while (segundoTermino[i] != '}') {
-            finalStr[j] = segundoTermino[i];
-            i++;
-            j++;
-        }
-        final = final + atoi(finalStr);
-
-        conjunto = dlist_crear(primerTermino);
-        if (intervalo_valido(inicio, final))
-            dlist_insertar_final(conjunto, crear_intervalo(inicio, final));
-
-    } else
-        printf ("sintaxis incorrecta\n");
-    return conjunto;
-}
-
-Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino){
-    Conjunto conjunto = dlist_crear(primerTermino);
-    char numero[MAX_LINEA];
-    int i = 1, j = 0;
-
-    while (segundoTermino[i] != '}') {
-        while (segundoTermino[i] != ','){
-            numero[j] = segundoTermino[i];
-            j++;
-            i++;
-        }
-        j = 0;
-        dlist_insertar_final(conjunto, crear_intervalo(atoi(numero), atoi(numero)));
-    }
-
-    return conjunto;
-}
-
-int operacion_dos_conjuntos (char* primerTermino, char* segundoTermino){
-    char* primerBuffer[MAX_LINEA], segundoBuffer[MAX_LINEA], operacion;
-    int i = 0, j = 0;
-    Conjunto primerConjunto, segundoConjunto, conjuntoResultante;
-
-    while (segundoTermino[i] != ' '){
-        primerBuffer[j] = segundoTermino[i];
-        i++;
-        j++;
-    }
-    j = 0;
-    i++;
-    operacion = segundoTermino[i];
-    i++;
-    if (segundoTermino[i] == ' '){
-        while (segundoTermino[i] != '\0'){
-            segundoBuffer[j] = segundoTermino[i];
-            i++;
-            j++;
-        }
-        segundoBuffer[j] = '\0';
-    } else
-        printf ("error\n");
-
-    primerConjunto = thash_buscar(primerBuffer, tablaHash, hash_str, conjunto_comparar_nombre);
-    segundoConjunto = thash_buscar(primerBuffer, tablaHash, hash_str, conjunto_comparar_nombre);
-    if (primerConjunto && segundoConjunto){
-        switch (operacion) {
-            case '|':
-                // insertar_tabla_hash (conjunto_union(primerTermino, primerConjunto, segundoConjunto), tabla);
-                break;
-
-            case '&':
-                // insertar_tabla_hash (conjunto_interseccion(primerTermino, primerConjunto, segundoConjunto), tabla);
-                break;
-            
-            case '-':
-                // insertar_tabla_hash (conjunto_resta(primerTermino, primerConjunto, segundoConjunto), tabla);
-                break;
-            
-            default:
-                printf ("error\n");
-        }
-
-    } else 
-        printf ("no se encontro alguno de los conjuntos\n");
-
-}
-
-
 
 int main (){
     int codigo;
     char entrada[MAX_LINEA], primerTermino[MAX_LINEA], segundoTermino[MAX_LINEA];
-    Conjunto conjunto;
     SList* tablaHash = thash_crear();
     printf ("ingrese comando\n");
     while (strcmp(leer_entrada(entrada), "salir\0") != 0){
-        printf ("entrada: %s \n",entrada);
         codigo = descomponer_entrada(entrada, primerTermino, segundoTermino);
-        printf ("codigo: %d\n", codigo);
         switch (codigo) {
             case 1:
-                /* imprimo segundo termino */
-                printf ("imprimo \n");
-                dlist_imprimir(thash_buscar(segundoTermino, tablaHash, hash_str, conjunto_comparar_nombre), imprimir_intervalo);
-                printf ("segundo: %s \n",segundoTermino);
+                dlist_imprimir(thash_buscar(segundoTermino, tablaHash, hash_str, conjunto_comparar_string), imprimir_intervalo);
                 break;
             
             case 2:
-                /* hacer operaciones */
                 realizar_operacion(primerTermino, segundoTermino, tablaHash);
-                printf ("primer: %s \n",primerTermino);
-                printf ("segundo: %s \n",segundoTermino);
                 break;
             default:
                 printf ("error\n");

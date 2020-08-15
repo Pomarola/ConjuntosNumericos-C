@@ -4,14 +4,13 @@ Intervalo *crear_intervalo(int inicio, int final) {
   Intervalo *nuevoIntervalo = malloc(sizeof(Intervalo));
   nuevoIntervalo->inicio = inicio;
   nuevoIntervalo->final = final;
+  //printf("creado: inicio: %d, final: %d \n", nuevoIntervalo->inicio, nuevoIntervalo->final);
 
   return nuevoIntervalo;
 }
 
 int intervalo_valido(int inicio, int final) {
-  if (inicio > final)
-    return 0;
-  return 1;
+  return (final >= inicio);
 }
 
 void imprimir_intervalo(void *intervalo) {
@@ -21,10 +20,20 @@ void imprimir_intervalo(void *intervalo) {
     printf("%d:%d", ((Intervalo *) intervalo)->inicio, ((Intervalo *) intervalo)->final);
 }
 
-int conjunto_comparar_nombre(Conjunto conjunto, char* dato){
-  if (strcmp(conjunto->nombre,dato) == 0)
+int conjunto_comparar_string(void* conjunto, void* dato){
+  if (strcmp(((Conjunto) conjunto)->nombre,((char*) dato)) == 0)
     return 1;
   return 0;
+}
+
+int conjunto_comparar_nombre(void* conjunto, void* dato){
+  if (strcmp(((Conjunto) conjunto)->nombre,((Conjunto) dato)->nombre) == 0)
+    return 1;
+  return 0;
+}
+
+int intervalo_comparar (void* intervalo1, void* intervalo2){
+  return (((Intervalo *) intervalo1)->inicio > ((Intervalo *) intervalo2)->inicio);
 }
 
 void liberar_intervalo(void *intervalo) {
@@ -37,7 +46,7 @@ int intersecar(int inicio1, int final1, int inicio2, int final2) {
 
 void unificar_intervalos(Intervalo* nodo, Intervalo* aux) {
   aux->inicio = nodo->inicio <= aux->inicio ? nodo->inicio : aux->inicio;
-  aux->final = nodo->final <= aux->final ? nodo->final : aux->final;
+  aux->final = nodo->final >= aux->final ? nodo->final : aux->final;
 }
 
 Conjunto conjunto_union(char* nombre, Conjunto lista1, Conjunto lista2) {
@@ -81,10 +90,17 @@ Conjunto conjunto_interseccion(char* nombre, Conjunto lista1, Conjunto lista2){
       auxInicio = ((Intervalo*) (nodo1->dato))->inicio >= ((Intervalo*) (nodo2->dato))->inicio ? ((Intervalo*) (nodo1->dato))->inicio : ((Intervalo*) (nodo2->dato))->inicio;
       auxFinal = ((Intervalo*) (nodo1->dato))->final <= ((Intervalo*) (nodo2->dato))->final ? ((Intervalo*) (nodo1->dato))->final : ((Intervalo*) (nodo2->dato))->final;
 
-      intervaloAux = crear_intervalo(auxInicio, auxFinal);
-      dlist_insertar_final(interseccionConjuntos, intervaloAux);
+      if (intervalo_valido(auxInicio, auxFinal)){
+        intervaloAux = crear_intervalo(auxInicio, auxFinal);
+        dlist_insertar_final(interseccionConjuntos, intervaloAux);
+      }
 
       if (((Intervalo*) (nodo1->dato))->final == auxFinal)
+        nodo1 = nodo1->sig;
+      else
+        nodo2 = nodo2->sig;
+    } else {
+      if (((Intervalo*) (nodo1->dato))->inicio < ((Intervalo*) (nodo2->dato))->inicio)
         nodo1 = nodo1->sig;
       else
         nodo2 = nodo2->sig;
@@ -107,8 +123,10 @@ Conjunto conjunto_complemento(char *nombre, Conjunto lista) {
       dlist_insertar_final(complementoConjunto, intervaloAux);
     }
     for (; nodo->sig != NULL; nodo = nodo->sig) {
-      intervaloAux = crear_intervalo((((Intervalo*) (nodo->dato))->final + 1), (((Intervalo*) (nodo->sig->dato))->inicio - 1));
-      dlist_insertar_final(complementoConjunto, intervaloAux);
+      if(intervalo_valido((((Intervalo*) (nodo->dato))->final + 1), (((Intervalo*) (nodo->sig->dato))->inicio - 1))) {
+        intervaloAux = crear_intervalo((((Intervalo*) (nodo->dato))->final + 1), (((Intervalo*) (nodo->sig->dato))->inicio - 1));
+        dlist_insertar_final(complementoConjunto, intervaloAux);
+      }
     }
     if (((Intervalo*) (nodo->dato))->final != INT_MAX) {
       intervaloAux = crear_intervalo((((Intervalo*) (nodo->dato))->final + 1), INT_MAX);

@@ -1,11 +1,12 @@
 #include "hash.h"
+#include <stdio.h>
 
-int hash_str(char* string) {
+int hash_str(void* string) {
   long long int key = 0;
-  for (int i = 0; string[i] != '\0'; i++) {
-    key = key * pow(string[i], PRIMO));
-  }
-  return key % TAM_TABLA;
+  for (int i = 0; ((char*) string)[i] != '\0'; i++)
+      key += ((char*) string)[i] * pow(2, (i % 10));
+  
+  return (int) (key % TAM_TABLA);
 }
 
 SList* thash_crear(){

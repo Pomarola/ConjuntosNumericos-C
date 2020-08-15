@@ -9,16 +9,16 @@ DList* dlist_crear(char *nombre) {
   return lista;
 }
 
-void dlist_destruir(DList* lista) {
+void dlist_destruir(void* lista) {
   DNodo *nodoAEliminar;
-  while (lista->primero) {
-    nodoAEliminar = lista->primero;
-    lista->primero = nodoAEliminar->sig;
+  while (((DList*) lista)->primero) {
+    nodoAEliminar = ((DList*) lista)->primero;
+    ((DList*) lista)->primero = nodoAEliminar->sig;
     free(nodoAEliminar->dato);
     free(nodoAEliminar);
   }
-  free(lista->nombre);
-  free(lista);
+  free(((DList*) lista)->nombre);
+  free(((DList*) lista));
 }
 
 void dlist_insertar_final(DList* lista, void *dato) {
@@ -40,7 +40,7 @@ void dlist_imprimir(DList * lista, FuncionVisitar imprimir) {
   if (lista) {
     DNodo* nodo = lista->primero;
     if (!nodo)
-      printf("Ø\n");
+      printf("Conjunto Vacio\n");
     else {
       for (; nodo->sig != NULL; nodo = nodo->sig) {
           imprimir(nodo->dato);
@@ -49,6 +49,8 @@ void dlist_imprimir(DList * lista, FuncionVisitar imprimir) {
       imprimir(nodo->dato);
       printf("\n");
     }
+  } else {
+    printf("No se encontro ningun conjunto con ese nombre \n");
   }
 }
 

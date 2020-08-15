@@ -3,14 +3,13 @@
 
 #include <stdlib.h>
 #include <stddef.h>
-#include <math.h>
 
 typedef struct _SNodo {
   void *dato;
   struct _SNodo *sig;
 } SNodo;
 
-typedef SNodo *SList;
+typedef SNodo* SList;
 
 typedef void (*FuncionDestruir) (void *dato);
 

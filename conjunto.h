@@ -1,7 +1,6 @@
 #ifndef __CONJUNTO_H__
 #define __CONJUNTO_H__
 #include "dlist.h"
-#include <stdio.h>
 #include <limits.h>
 
 typedef struct _Intervalo {
@@ -20,7 +19,9 @@ int intervalo_valido(int inicio, int final);
 // Imprime en pantalla el intervalo.
 void imprimir_intervalo(void *intervalo);
 
-int conjunto_comparar_nombre(Conjunto conjunto, char* dato);
+int conjunto_comparar_string(void* conjunto, void* dato);
+int conjunto_comparar_nombre(void* conjunto, void* dato);
+int intervalo_comparar (void* intervalo1, void* intervalo2);
 
 // Libera el espacio en memoria ocupado por el intervalo.
 void liberar_intervalo(void *intervalo);

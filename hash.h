@@ -1,17 +1,15 @@
 #ifndef __HASH_H__
 #define __HASH_H__
 
-#include <stdlib.h>
-#include <stddef.h>
 #include <math.h>
-#include <slist.h>
+#include "slist.h"
 
-#define PRIMO 31;
-#define TAM_TABLA 301;
+#define PRIMO 31
+#define TAM_TABLA 301
 
 typedef int (*FuncionHash) (void *dato);
 
-int hash_str(char* string);
+int hash_str(void* string);
 
 
 SList* thash_crear();

@@ -2,6 +2,7 @@
 #define __DLIST_H__
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <string.h>
 
 typedef struct _DNodo {
@@ -24,10 +25,10 @@ typedef int (*FuncionComparar) (void *dato1, void *dato2);
 DList *dlist_crear(char *nombre);
 
 //  Destruccion de la lista.
-void dlist_destruir(DList* lista);
+void dlist_destruir(void* lista);
 
 //  Agrega un elemento al final de la lista.
-void dlist_agregar_final(DList* lista, void *dato);
+void dlist_insertar_final(DList* lista, void *dato);
 
 void dlist_imprimir(DList * lista, FuncionVisitar imprimir);
 
