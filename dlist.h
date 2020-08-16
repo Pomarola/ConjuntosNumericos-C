@@ -21,6 +21,8 @@ typedef void (*FuncionVisitar) (void *dato);
 
 typedef int (*FuncionComparar) (void *dato1, void *dato2);
 
+typedef int (*FuncionIguales) (void *dato1, void *dato2);
+
 //  Devuelve una lista vacía.
 DList *dlist_crear(char *nombre);
 
@@ -45,8 +47,8 @@ DNodo *merge(DNodo * primero, DNodo * segundo, FuncionComparar comparar);
 DNodo *merge_sort(DNodo * primero, FuncionComparar comparar);
 
 //  Dadas una dlist y una funcion de comparacion,
-//  devuelve una dlist ordenada por merge sort mediante esa funcion.
-void dlist_merge_sort(DList* lista, FuncionComparar comparar);
+//  devuelve una dlist ordenada por merge sort y elimina los intervalos repetidos.
+void dlist_merge_sort(DList* lista, FuncionComparar comparar, FuncionIguales iguales);
 
 
 #endif /* __DLIST_H__ */

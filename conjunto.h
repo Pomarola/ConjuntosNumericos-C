@@ -15,6 +15,7 @@ Intervalo *crear_intervalo(int inicio, int final);
 
 // Devuelve 1 si se trata de un intervalo valido, 0 si no lo es.
 int intervalo_valido(int inicio, int final);
+int intervalo_igual (void* intervalo1, void* intervalo2);
 
 // Imprime en pantalla el intervalo.
 void imprimir_intervalo(void *intervalo);

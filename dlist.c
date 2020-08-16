@@ -99,16 +99,26 @@ DNodo *merge_sort(DNodo * primero, FuncionComparar comparar) {
   return merge(primero, mitad, comparar);
 }
 
-void dlist_merge_sort(DList* lista, FuncionComparar comparar) {
+void dlist_merge_sort(DList* lista, FuncionComparar comparar, FuncionIguales iguales) {
   if (lista->primero) {
 
     DNodo *nodo = lista->primero;
+    DNodo *nodoAEliminar;
 
     nodo = merge_sort(nodo, comparar);
 
     lista->primero = nodo;
 
-    for (; nodo != NULL; nodo = nodo->sig)
-      lista->ultimo = nodo;
+    while (nodo->sig){
+      if (iguales(nodo->dato, nodo->sig->dato)){
+        nodoAEliminar = nodo->sig;
+        nodo->sig = nodoAEliminar->sig;
+        nodo->sig->ant = nodo;
+        free(nodoAEliminar);
+        free(nodoAEliminar);
+      } else
+        nodo = nodo->sig;
+    }
+    lista->ultimo = nodo;
   }
 }

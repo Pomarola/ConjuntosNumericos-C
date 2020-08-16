@@ -36,6 +36,10 @@ int intervalo_comparar (void* intervalo1, void* intervalo2){
   return (((Intervalo *) intervalo1)->inicio > ((Intervalo *) intervalo2)->inicio);
 }
 
+int intervalo_igual (void* intervalo1, void* intervalo2){
+  return (((Intervalo *) intervalo1)->inicio == ((Intervalo *) intervalo2)->inicio);
+}
+
 void liberar_intervalo(void *intervalo) {
   free(((Intervalo *) intervalo));
 }
@@ -75,10 +79,9 @@ Conjunto conjunto_union(char* nombre, Conjunto lista1, Conjunto lista2) {
         intervaloAux = NULL;
       }
     }
-    printf("hola \n");
   }
   dlist_insertar_final(unionConjuntos, intervaloAux);
-  
+
   return unionConjuntos;
 }
 

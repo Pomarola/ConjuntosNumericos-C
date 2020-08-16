@@ -191,9 +191,9 @@ void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tabla
             conjunto = leer_conjunto_compresion(primerTermino, segundoTermino, tablaHash);
         } else {
             conjunto = leer_conjunto_extension(primerTermino, segundoTermino, tablaHash);
+            dlist_merge_sort(conjunto, intervalo_comparar, intervalo_igual);
         }
         if (conjunto){
-            dlist_merge_sort(conjunto, intervalo_comparar);
             tablaHash = thash_insertar (conjunto, tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
         }
     } else if (segundoTermino[i] == '~'){
