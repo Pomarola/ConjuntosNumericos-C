@@ -45,7 +45,7 @@ void liberar_intervalo(void *intervalo) {
 }
 
 int intersecar(int inicio1, int final1, int inicio2, int final2) {
-  return !(final1 < inicio2 || inicio1 > final1);
+  return !(final1 < inicio2 || inicio1 > final2);
 }
 
 void unificar_intervalos(Intervalo* nodo, Intervalo* aux) {
@@ -56,7 +56,8 @@ void unificar_intervalos(Intervalo* nodo, Intervalo* aux) {
 Conjunto conjunto_union(char* nombre, Conjunto lista1, Conjunto lista2) {
   Conjunto unionConjuntos = dlist_crear(nombre);
   DNodo* nodo1 = lista1->primero,* nodo2 = lista2->primero;
-  Intervalo* intervaloAux;
+  Intervalo* intervaloAux = NULL;
+  int aux1,aux2;
 
   while(nodo1 || nodo2) {
     if (!intervaloAux){
@@ -68,10 +69,10 @@ Conjunto conjunto_union(char* nombre, Conjunto lista1, Conjunto lista2) {
         nodo2 = nodo2->sig;
       }
     } else {
-      if (nodo1 && intersecar(((Intervalo*) (nodo1->dato))->inicio, ((Intervalo*) (nodo1->dato))->final, (intervaloAux->inicio + 1), (intervaloAux->final + 1))){
+      if (nodo1 && intersecar(((Intervalo*) (nodo1->dato))->inicio, ((Intervalo*) (nodo1->dato))->final, (aux1 = intervaloAux->inicio == INT_MAX ? INT_MAX : intervaloAux->inicio + 1), (aux2 = intervaloAux->final == INT_MAX ? INT_MAX : intervaloAux->final + 1))){
         unificar_intervalos(nodo1->dato, intervaloAux);
         nodo1 = nodo1->sig;
-      } else if (nodo2 && intersecar(((Intervalo*) (nodo2->dato))->inicio, ((Intervalo*) (nodo2->dato))->final, (intervaloAux->inicio + 1), (intervaloAux->final + 1))){
+      } else if (nodo2 && intersecar(((Intervalo*) (nodo2->dato))->inicio, ((Intervalo*) (nodo2->dato))->final, (aux1 = intervaloAux->inicio == INT_MAX ? INT_MAX : intervaloAux->inicio + 1), (aux2 = intervaloAux->final == INT_MAX ? INT_MAX : intervaloAux->final + 1))){
         unificar_intervalos(nodo2->dato, intervaloAux);
         nodo2 = nodo2->sig;
       } else {
@@ -80,6 +81,7 @@ Conjunto conjunto_union(char* nombre, Conjunto lista1, Conjunto lista2) {
       }
     }
   }
+  
   dlist_insertar_final(unionConjuntos, intervaloAux);
 
   return unionConjuntos;

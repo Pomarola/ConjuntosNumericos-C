@@ -206,7 +206,10 @@ void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tabla
         buffer[j] = '\0';
         
         conjunto = thash_buscar(buffer, tablaHash, hash_str, conjunto_comparar_string);
-        tablaHash = thash_insertar (conjunto_complemento(primerTermino, conjunto), tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
+        if (conjunto)
+            tablaHash = thash_insertar (conjunto_complemento(primerTermino, conjunto), tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
+        else
+            printf ("no se encontro el conjunto\n");
         
     } else
         operacion_dos_conjuntos (primerTermino, segundoTermino, tablaHash);
