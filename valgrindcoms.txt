@@ -5,3 +5,4 @@ valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose -
 {x : -23 < x < -1}
 Use of uninitialised value of size 8
 
+indent -kr -brf -i2 -l80 -nut somefile.c
