@@ -1,5 +1,4 @@
-#include "hash.h"
-#include <stdio.h>
+#include "thash.h"
 
 int hash_str(void* string) {
   long long int key = 0;

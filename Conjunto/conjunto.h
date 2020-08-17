@@ -1,7 +1,8 @@
 #ifndef __CONJUNTO_H__
 #define __CONJUNTO_H__
-#include "dlist.h"
+
 #include <limits.h>
+#include "../DList/dlist.h"
 
 typedef struct _Intervalo {
     int inicio;
@@ -15,17 +16,21 @@ Intervalo *crear_intervalo(int inicio, int final);
 
 // Devuelve 1 si se trata de un intervalo valido, 0 si no lo es.
 int intervalo_valido(int inicio, int final);
+
+// Devuelve 1 si los inicios de los intervalos coinciden, 0 si no.
 int intervalo_igual (void* intervalo1, void* intervalo2);
 
 // Imprime en pantalla el intervalo.
 void imprimir_intervalo(void *intervalo);
 
-int conjunto_comparar_string(void* conjunto, void* dato);
-int conjunto_comparar_nombre(void* conjunto, void* dato);
-int intervalo_comparar (void* intervalo1, void* intervalo2);
+// Devuelve 1 si el string coincide con el nombre del conjunto, 0 si no.
+int conjunto_comparar_string(void* conjunto, void* string);
 
-// Libera el espacio en memoria ocupado por el intervalo.
-void liberar_intervalo(void *intervalo);
+// Devuelve 1 si los nombres de los conjuntos coinciden, 0 si no.
+int conjunto_comparar_nombre(void* conjunto1, void* conjunto2);
+
+// Devuelve 1 si el inicio del primer intervalo es mayor al del segundo, 0 si no.
+int intervalo_comparar (void* intervalo1, void* intervalo2);
 
 // Dados sus extremos; devuelve 1 si los intervalos se intersecan, 0 si no lo hacen.
 int intersecar(int inicio1, int final1, int inicio2, int final2);
