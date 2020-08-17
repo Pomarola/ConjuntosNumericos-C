@@ -4,10 +4,14 @@
 
 #define MAX_LINEA 1001
 
+// Devuelve una key para la tabla hash segun un conjunto dado.
 int hash_conjunto(void* conjunto){
     return hash_str(((Conjunto) conjunto)->nombre);
 }
 
+// Dados dos strings, uno con el nombre del conjunto y otro de la forma {x : k0 (<=,<) x (<=,<) k1}
+// crea un conjunto con ese nombre y ese intervalo.
+// Devuelve ese conjunto.
 Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino) {
     Conjunto conjunto = NULL;
     char inicioStr[MAX_LINEA], finalStr[MAX_LINEA], letra = segundoTermino[1];
@@ -95,6 +99,9 @@ Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino) {
     return conjunto;
 }
 
+// Dados dos strings, uno con el nombre del conjunto y otro de la forma {k0,k1,...,kn}
+// crea un conjunto con ese nombre y esos elementos, eliminando los repetidos y ordenandolos de menor a mayor.
+// Devuelve ese conjunto.
 Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino) {
     Conjunto conjunto = dlist_crear(primerTermino);
     int i = 0, error = 0;
@@ -121,6 +128,8 @@ Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino) {
     return conjunto;
 }
 
+// Dados una tabla hash y dos strings, uno con el nombre del conjunto, otro con la operacion y los nombres de conjuntos,
+// realiza la operacion y coloca el resultado en una tabla hash.
 void operacion_dos_conjuntos (char* primerTermino, char* segundoTermino, SList* tablaHash){
     char primerBuffer[MAX_LINEA], segundoBuffer[MAX_LINEA], operacion;
     int i = 0, j = 0;
@@ -173,6 +182,7 @@ void operacion_dos_conjuntos (char* primerTermino, char* segundoTermino, SList* 
 
 }
 
+// Pide una entrada por teclado y la devuelve.
 char* leer_entrada(char* entrada) {
     int largoEntrada;
 
@@ -185,6 +195,7 @@ char* leer_entrada(char* entrada) {
     return entrada;
 }
 
+// Descompone la entrada en 2 terminos y devuelve un (int) codigo que denota la accion a realizar. 
 int descomponer_entrada(char* entrada, char* primerTermino, char* segundoTermino) {
     int i = 0, j = 0, codigo = 0;
     while (entrada[i] != ' '){
@@ -214,6 +225,8 @@ int descomponer_entrada(char* entrada, char* primerTermino, char* segundoTermino
     return codigo;    
 }
 
+// Dados una tabla hash y dos strings, el primero con el nombre del conjunto, lee el segundo para ver que operacion realizar.
+// Luego de realizar la operacion, almacena el resultado en una tabla hash.
 void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tablaHash){
     Conjunto conjunto;
     char buffer[MAX_LINEA];
