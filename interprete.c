@@ -21,6 +21,7 @@ Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino) {
             } else 
                 error = 1;
         }
+        inicioStr[j] = '\0';
 
         if (error) {
             printf ("Sintaxis del conjunto incorrecta\n");
@@ -76,6 +77,7 @@ Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino) {
             } else
                 error = 1;
         }
+        finalStr[j] = '\0';
 
         if (error) {
             printf ("Sintaxis del conjunto incorrecta\n");
