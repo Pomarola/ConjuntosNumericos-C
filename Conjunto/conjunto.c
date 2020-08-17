@@ -76,7 +76,8 @@ Conjunto conjunto_union(char* nombre, Conjunto lista1, Conjunto lista2) {
       }
     }
   }  
-  dlist_insertar_final(unionConjuntos, intervaloAux);
+  if (intervaloAux)
+    dlist_insertar_final(unionConjuntos, intervaloAux);
   return unionConjuntos;
 }
 
