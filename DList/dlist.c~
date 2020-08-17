@@ -1,7 +1,7 @@
 #include "dlist.h"
 
-DList *dlist_crear(char *nombre) {
-  DList *lista = malloc(sizeof(DList));
+DList* dlist_crear(char *nombre) {
+  DList* lista = malloc(sizeof(DList));
   lista->primero = NULL;
   lista->ultimo = NULL;
   lista->nombre = malloc(sizeof(char) * (strlen(nombre) + 1));
@@ -9,19 +9,19 @@ DList *dlist_crear(char *nombre) {
   return lista;
 }
 
-void dlist_destruir(void *lista) {
+void dlist_destruir(void* lista) {
   DNodo *nodoAEliminar;
-  while (((DList *) lista)->primero) {
-    nodoAEliminar = ((DList *) lista)->primero;
-    ((DList *) lista)->primero = nodoAEliminar->sig;
+  while (((DList*) lista)->primero) {
+    nodoAEliminar = ((DList*) lista)->primero;
+    ((DList*) lista)->primero = nodoAEliminar->sig;
     free(nodoAEliminar->dato);
     free(nodoAEliminar);
   }
-  free(((DList *) lista)->nombre);
-  free(((DList *) lista));
+  free(((DList*) lista)->nombre);
+  free(((DList*) lista));
 }
 
-void dlist_insertar_final(DList * lista, void *dato) {
+void dlist_insertar_final(DList* lista, void *dato) {
   DNodo *nuevoNodo = malloc(sizeof(DNodo));
   nuevoNodo->dato = dato;
   nuevoNodo->sig = NULL;
@@ -38,13 +38,13 @@ void dlist_insertar_final(DList * lista, void *dato) {
 
 void dlist_imprimir(DList * lista, FuncionVisitar imprimir) {
   if (lista) {
-    DNodo *nodo = lista->primero;
+    DNodo* nodo = lista->primero;
     if (!nodo)
       printf("Conjunto Vacio\n");
     else {
       for (; nodo->sig != NULL; nodo = nodo->sig) {
-        imprimir(nodo->dato);
-        printf(",");
+          imprimir(nodo->dato);
+          printf(",");
       }
       imprimir(nodo->dato);
       printf("\n");
@@ -99,8 +99,7 @@ DNodo *merge_sort(DNodo * primero, FuncionComparar comparar) {
   return merge(primero, mitad, comparar);
 }
 
-void dlist_merge_sort(DList * lista, FuncionComparar comparar,
-                      FuncionIguales iguales) {
+void dlist_merge_sort(DList* lista, FuncionComparar comparar, FuncionIguales iguales) {
   if (lista->primero) {
 
     DNodo *nodo = lista->primero;
@@ -120,7 +119,7 @@ void dlist_merge_sort(DList * lista, FuncionComparar comparar,
 
         if (nodo->sig)
           nodo->sig->ant = nodo;
-
+        
       } else
         nodo = nodo->sig;
     }
