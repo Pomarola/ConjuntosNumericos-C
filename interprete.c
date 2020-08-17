@@ -198,7 +198,7 @@ char* leer_entrada(char* entrada) {
 // Descompone la entrada en 2 terminos y devuelve un (int) codigo que denota la accion a realizar. 
 int descomponer_entrada(char* entrada, char* primerTermino, char* segundoTermino) {
     int i = 0, j = 0, codigo = 0;
-    while (entrada[i] != ' '){
+    while (entrada[i] != ' ' && entrada[i] != '\0'){
         primerTermino[j] = entrada[i];
         j++;
         i++;
@@ -228,6 +228,7 @@ int descomponer_entrada(char* entrada, char* primerTermino, char* segundoTermino
 // Dados una tabla hash y dos strings, el primero con el nombre del conjunto, lee el segundo para ver que operacion realizar.
 // Luego de realizar la operacion, almacena el resultado en una tabla hash.
 void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tablaHash){
+    printf ("asd: %s", segundoTermino);
     Conjunto conjunto;
     char buffer[MAX_LINEA];
     int i = 0, j = 0;
