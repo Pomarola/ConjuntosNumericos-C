@@ -1,8 +1,8 @@
 ARG = -Wall -Wextra -Werror -std=c99
-SLIST = ../SList/slist
-THASH = ../THash/thash
-DLIST = ../DList/dlist
-CONJUNTO = ../Conjunto/conjunto
+SLIST = ./SList/slist
+THASH = ./THash/thash
+DLIST = ./DList/dlist
+CONJUNTO = ./Conjunto/conjunto
 TEMP = $(SLIST).o $(THASH).o $(DLIST).o $(CONJUNTO).o interprete.o
 
 all: interprete

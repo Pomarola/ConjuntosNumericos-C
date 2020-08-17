@@ -1,5 +1,5 @@
-#include "../THash/thash.h"
-#include "../Conjunto/conjunto.h"
+#include "./THash/thash.h"
+#include "./Conjunto/conjunto.h"
 #include <ctype.h>
 
 #define MAX_LINEA 1001
