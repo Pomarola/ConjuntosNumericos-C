@@ -18,20 +18,20 @@ typedef struct {
   char *nombre;
 } DList;
 
-typedef void (*FuncionVisitar)(void *dato);
+typedef void (*FuncionVisitar) (void *dato);
 
-typedef int (*FuncionComparar)(void *dato1, void *dato2);
+typedef int (*FuncionComparar) (void *dato1, void *dato2);
 
-typedef int (*FuncionIguales)(void *dato1, void *dato2);
+typedef int (*FuncionIguales) (void *dato1, void *dato2);
 
 // Devuelve una lista vacía.
 DList *dlist_crear(char *nombre);
 
 // Destruccion de la lista.
-void dlist_destruir(void *lista);
+void dlist_destruir(void* lista);
 
 // Agrega un elemento al final de la lista.
-void dlist_insertar_final(DList * lista, void *dato);
+void dlist_insertar_final(DList* lista, void *dato);
 
 // Imprime en pantalla el contenido de los nodos, segun la funcion dada.
 void dlist_imprimir(DList * lista, FuncionVisitar imprimir);
@@ -50,8 +50,7 @@ DNodo *merge_sort(DNodo * primero, FuncionComparar comparar);
 
 // Dadas una dlist y una funcion de comparacion,
 // devuelve una dlist ordenada por merge sort y elimina los intervalos repetidos.
-void dlist_merge_sort(DList * lista, FuncionComparar comparar,
-                      FuncionIguales iguales);
+void dlist_merge_sort(DList* lista, FuncionComparar comparar, FuncionIguales iguales);
 
 
-#endif                          /* __DLIST_H__ */
+#endif /* __DLIST_H__ */
