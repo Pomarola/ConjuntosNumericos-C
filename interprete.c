@@ -102,7 +102,7 @@ Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino) {
 
     char *buffer = &segundoTermino[0] + 1;
     while (buffer[i] != '}' && error == 0) {
-        if (buffer[i] == ',')
+        if (buffer[i] == ',' || buffer[i] == ' ')
             i++;
         else if (isdigit(buffer[i]) || buffer[i] == '-') {
             numero = strtol(buffer + i, &buffer, 10);
