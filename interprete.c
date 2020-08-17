@@ -135,7 +135,7 @@ void operacion_dos_conjuntos (char* primerTermino, char* segundoTermino, SList* 
     int i = 0, j = 0;
     Conjunto primerConjunto, segundoConjunto;
 
-    while (segundoTermino[i] != ' ') {
+    while (segundoTermino[i] != ' ' && segundoTermino[i] != '\0') {
         primerBuffer[j] = segundoTermino[i];
         j++; 
         i++;
@@ -227,8 +227,7 @@ int descomponer_entrada(char* entrada, char* primerTermino, char* segundoTermino
 
 // Dados una tabla hash y dos strings, el primero con el nombre del conjunto, lee el segundo para ver que operacion realizar.
 // Luego de realizar la operacion, almacena el resultado en una tabla hash.
-void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tablaHash){
-    printf ("asd: %s", segundoTermino);
+void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tablaHash) {
     Conjunto conjunto;
     char buffer[MAX_LINEA];
     int i = 0, j = 0;
