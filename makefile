@@ -3,7 +3,7 @@ SLIST = ./SList/slist
 THASH = ./THash/thash
 DLIST = ./DList/dlist
 CONJUNTO = ./Conjunto/conjunto
-TEMP = $(SLIST).o $(THASH).o $(DLIST).o $(CONJUNTO).o interprete.o
+TEMP = slist.o thash.o dlist.o conjunto.o
 
 all: interprete
 
