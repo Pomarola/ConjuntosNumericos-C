@@ -8,7 +8,7 @@ int hash_conjunto(void* conjunto){
     return hash_str(((Conjunto) conjunto)->nombre);
 }
 
-Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino, SList* tablaHash) {
+Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino) {
     Conjunto conjunto = NULL;
     char inicioStr[MAX_LINEA], finalStr[MAX_LINEA], letra = segundoTermino[1];
     int i = 5, j = 0, inicio = 0, final = 0, error = 0; 
@@ -93,7 +93,7 @@ Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino, SLi
     return conjunto;
 }
 
-Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino, SList* tablaHash) {
+Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino) {
     Conjunto conjunto = dlist_crear(primerTermino);
     int i = 0, error = 0;
     long numero;
@@ -219,11 +219,11 @@ void realizar_operacion (char* primerTermino, char* segundoTermino, SList* tabla
     int i = 0, j = 0;
     if (segundoTermino[i] == '{'){
         if (segundoTermino[i + 1] >= 'a' && segundoTermino[i + 1] <= 'z'){
-            conjunto = leer_conjunto_compresion(primerTermino, segundoTermino, tablaHash);
+            conjunto = leer_conjunto_compresion(primerTermino, segundoTermino);
             if (conjunto)
                 tablaHash = thash_insertar (conjunto, tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
         } else {
-            conjunto = leer_conjunto_extension(primerTermino, segundoTermino, tablaHash);
+            conjunto = leer_conjunto_extension(primerTermino, segundoTermino);
             if (conjunto) {
                 dlist_merge_sort(conjunto, intervalo_comparar, intervalo_igual);
                 tablaHash = thash_insertar (conjunto, tablaHash, hash_conjunto, conjunto_comparar_nombre, dlist_destruir);
