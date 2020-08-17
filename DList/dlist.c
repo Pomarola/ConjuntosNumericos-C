@@ -113,10 +113,12 @@ void dlist_merge_sort(DList* lista, FuncionComparar comparar, FuncionIguales igu
       if (iguales(nodo->dato, nodo->sig->dato)) {
         nodoAEliminar = nodo->sig;
         nodo->sig = nodoAEliminar->sig;
-        nodo->sig->ant = nodo;
 
+        free(nodoAEliminar->dato);
         free(nodoAEliminar);
-        free(nodoAEliminar);
+
+        if (nodo->sig)
+          nodo->sig->ant = nodo;
         
       } else
         nodo = nodo->sig;

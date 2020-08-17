@@ -14,7 +14,7 @@ Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino) {
     int i = 5, j = 0, inicio = 0, final = 0, error = 0; 
     if (segundoTermino[2] == ' ' && segundoTermino[3] == ':' && segundoTermino[4] == ' ') { // ya sabemos que segundoTermino[0] = '{' y que segundoTermino[1] es una letra
         while (segundoTermino[i] != ' ' && error == 0) {
-            if (isdigit(segundoTermino[i])) {
+            if (isdigit(segundoTermino[i]) || segundoTermino[i] == '-') {
                 inicioStr[j] = segundoTermino[i];
                 i++;
                 j++;
@@ -70,7 +70,7 @@ Conjunto leer_conjunto_compresion(char* primerTermino, char* segundoTermino) {
         i += 2;
 
         while (segundoTermino[i] != '}' && error == 0) {
-            if (isdigit(segundoTermino[i])) {
+            if (isdigit(segundoTermino[i]) || segundoTermino[i] == '-') {
                 finalStr[j] = segundoTermino[i];
                 i++;
                 j++;
@@ -104,13 +104,12 @@ Conjunto leer_conjunto_extension(char* primerTermino, char* segundoTermino) {
     while (buffer[i] != '}' && error == 0) {
         if (buffer[i] == ',')
             i++;
-        else if (!isdigit(buffer[i]))
-            error = 1;
-        else {
+        else if (isdigit(buffer[i]) || buffer[i] == '-') {
             numero = strtol(buffer + i, &buffer, 10);
             dlist_insertar_final(conjunto, crear_intervalo(numero, numero));
             i = 0;
-        }
+        } else 
+            error = 1;
     }
 
     if (error) {

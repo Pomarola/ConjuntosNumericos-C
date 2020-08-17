@@ -1,7 +1,7 @@
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./interprete
 
 {x : 234 <= x <= 424}
-{x : 23 <= x <= 42}
-{x : 23 < x < 42}
+{x : -23 <= x <= -2}
+{x : -23 < x < -1}
 Use of uninitialised value of size 8
 
