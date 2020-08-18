@@ -284,7 +284,7 @@ void realizar_operacion(char *primerTermino, char *segundoTermino,
                          tablaHash, hash_conjunto, conjunto_comparar_nombre,
                          dlist_destruir);
     else
-      printf("No se encontro el conjunto\n");
+      printf("No se encontro ningun conjunto con ese nombre\n");
 
   } else
     operacion_dos_conjuntos(primerTermino, segundoTermino, tablaHash);
